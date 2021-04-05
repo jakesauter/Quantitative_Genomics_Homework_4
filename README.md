@@ -1,11 +1,11 @@
-# **Quantitative Genomics and Genetics Homework 4**
+# **Quantitative Genomics and Genetics: Homework 4** 
 
 A report by **Jake Sauter**
 
 date: 4/5/2021
 
 
-## **Required Libraries**
+
 
 ```r
 library(dplyr)
@@ -48,22 +48,25 @@ We will first determine critical threshold for the specified statistic for $\alp
 one_sided_crit_value <- 
   qnorm(p = 0.05, 
         mean = 0,
-        sd = 1, 
+        # Corrected after update: 
+        # The distribution of the statistic (mean)
+        # will be normal with mean mu and sigma^2 = 1 / n
+        sd = 1 / sqrt(20), 
         lower.tail = FALSE)
 
-cat('C_{0.05} | H_0: mu = 0: ', one_sided_crit_value) 
+cat('C_{0.95} | H_0: mu = 0: ', one_sided_crit_value) 
 ```
 
 ```
-C_{0.05} | H_0: mu = 0:  1.644854
+C_{0.95} | H_0: mu = 0:  0.3678005
 ```
 
 ```r
-mean <- 0.5
-sd <- 1
+mean <- 0
+sd <- 1 / sqrt(20)
 domain <- seq(from = mean - 5*sd, 
               to   = mean + 5*sd, 
-              by   = .1)
+              by   = .001)
 
 df <- 
   dnorm(domain, 
@@ -72,13 +75,6 @@ df <-
   data.frame(x = domain,
              y = .)
 
-breaks <-
-  quantile(df$x) %>%
-  c(one_sided_crit_value) %>% 
-  unname() %>% round(1)
-
-labels <- breaks
-labels[length(labels)] <- 'C_0.05'
 
 df %>%
   ggplot() + 
@@ -86,8 +82,6 @@ df %>%
   geom_vline(aes(xintercept = one_sided_crit_value), 
              col = 'red', 
              lty = 2) +
-  # scale_x_continuous(breaks = breaks,
-  #                    labels = labels)
   annotate(geom = 'text', 
            x = one_sided_crit_value + (.35*one_sided_crit_value), 
            y = .7 * max(df$y), 
@@ -108,19 +102,19 @@ We now determine critical threshold for the specified statistic for $\alpha=0.05
 lower_crit_value <- 
   qnorm(p = 0.05 / 2, 
         mean = 0,
-        sd = 1)
+        sd = 1 / sqrt(20))
 
 upper_crit_value <- 
   qnorm(p = 0.05 / 2, 
         mean = 0,
-        sd = 1, 
+        sd = 1 / sqrt(20), 
         lower.tail = FALSE)
 
 cat('C_{0.025} | H_0: mu = 0: ', lower_crit_value) 
 ```
 
 ```
-C_{0.025} | H_0: mu = 0:  -1.959964
+C_{0.025} | H_0: mu = 0:  -0.4382613
 ```
 
 ```r
@@ -128,31 +122,21 @@ cat('C_{0.975} | H_0: mu = 0: ', upper_crit_value)
 ```
 
 ```
-C_{0.975} | H_0: mu = 0:  1.959964
+C_{0.975} | H_0: mu = 0:  0.4382613
 ```
 
 ```r
 mean <- 0
-sd <- 1
+sd <- 1 / sqrt(20)
 domain <- seq(from = mean - 5*sd, 
               to   = mean + 5*sd, 
-              by   = .1)
+              by   = .01)
 df <- 
   dnorm(domain, 
         mean = mean, 
         sd = sd) %>% 
   data.frame(x = domain,
              y = .)
-
-breaks <-
-  quantile(df$x) %>%
-  c(lower_crit_value, 
-    upper_crit_value) %>% 
-  unname() %>% round(1)
-
-labels <- breaks
-labels[length(labels) - 1] <- 'C_low'
-labels[length(labels)] <- 'C_high'
 
 df %>%
   ggplot() + 
@@ -163,8 +147,6 @@ df %>%
   geom_vline(aes(xintercept = upper_crit_value), 
              col = 'red', 
              lty = 2) + 
-  # scale_x_continuous(breaks = breaks,
-  #                    labels = labels) + 
   annotate(geom = 'text', 
            x = lower_crit_value + (.35*lower_crit_value), 
            y = .7 * max(df$y), 
@@ -181,8 +163,6 @@ df %>%
 ```
 
 ![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
-
-
 
 ### **2b.) Histogram of Means under the Null Distribution**
 
@@ -229,7 +209,7 @@ how_many(test_stats > one_sided_crit_value)
 ```
 
 ```
-[1] 0
+[1] 52
 ```
 
 ```r
@@ -237,7 +217,7 @@ how_many(test_stats < lower_crit_value)
 ```
 
 ```
-[1] 0
+[1] 27
 ```
 
 ```r
@@ -245,16 +225,13 @@ how_many(test_stats > upper_crit_value)
 ```
 
 ```
-[1] 0
+[1] 18
 ```
-
-
 
 ### **2c.) Calculating Power Given Known True Distriubtion**
 
-\*\*Consider the true distribution of the experiment $\mu = 0.5$, $sigma^2 = 1$ for the purposes of this question. Consider a sample size $n = 20$ and the mean of the sample as the test statistic. What is the power of this test for the null hypothesis in part [a] with a Type I error = $\alpha$ = 0.05 when considering $H_A > 0$? When is the power of this test for the null hypothesis in part [a] with a Type I error = $\alpha$ = $0.05$ when considering $H_A \neq 0$?
+**Consider the true distribution of the experiment $\mu = 0.5$, $sigma^2 = 1$ for the purposes of this question. Consider a sample size $n = 20$ and the mean of the sample as the test statistic. What is the power of this test for the null hypothesis in part [a] with a Type I error = $\alpha$ = 0.05 when considering $H_A > 0$? When is the power of this test for the null hypothesis in part [a] with a Type I error = $\alpha$ = $0.05$ when considering $H_A \neq 0$?**
 
-**Power does not depend on sample size in this case as we know the null distribution, true distribution, and critical value, allowing up to calculate the power of the test by integrating the PDF of the true distribution outside the bounds set by our critical test statistic values.**
 
 
 ```r
@@ -265,24 +242,24 @@ how_many(test_stats > upper_crit_value)
 one_tail_power <- 
   pnorm(one_sided_crit_value, 
         mean = 0.5, 
-        sd = 1, 
+        sd = 1 / sqrt(20), 
         lower.tail = FALSE)
 
 
 two_tail_power <- 
   pnorm(lower_crit_value, 
         mean = 0.5, 
-        sd = 1) +
+        sd = 1 / sqrt(20)) +
   pnorm(upper_crit_value, 
         mean = 0.5, 
-        sd = 1, 
+        sd = 1 / sqrt(20), 
         lower.tail = FALSE) 
 
 cat('One tailed power: ', one_tail_power, '\n')
 ```
 
 ```
-One tailed power:  0.1261349 
+One tailed power:  0.7228116 
 ```
 
 ```r
@@ -290,25 +267,25 @@ cat('Two tailed power: ', two_tail_power, '\n')
 ```
 
 ```
-Two tailed power:  0.07909753 
+Two tailed power:  0.6087795 
 ```
 
 
 ```r
 mean <- 0
-sd <- 1
+sd <- 1 / sqrt(20)
 domain <- seq(from = mean - 5*sd, 
               to   = mean + 5*sd, 
-              by   = .1)
+              by   = .01)
 df <-
   data.frame(
     domain = domain,
     null = dnorm(domain, 
                  mean = 0, 
-                 sd = 1), 
+                 sd = 1 / sqrt(20)), 
     true = dnorm(domain, 
                  mean = 0.5, 
-                 sd = 1)) %>% 
+                 sd = 1 / sqrt(20))) %>% 
   tidyr::pivot_longer(-c('domain')) 
 
 colors <- 
@@ -388,7 +365,7 @@ how_many(test_stats > one_sided_crit_value)
 ```
 
 ```
-[1] 0
+[1] 702
 ```
 
 ```r
@@ -404,15 +381,18 @@ how_many(test_stats > upper_crit_value)
 ```
 
 ```
-[1] 0
+[1] 579
 ```
 
 
 ```r
 library(patchwork)
 
-p1_2b <- p1_2b + ggtitle('n=20')
-p2_2d <- p2_2d + ggtitle('n=100')
+min_x <- min(p1_2b$data, p2_2d$data)
+max_x <- max(p1_2b$data, p2_2d$data)
+
+p1_2b <- p1_2b + ggtitle('Null Distribution Generated Samples') + xlim(min_x, max_x)
+p2_2d <- p2_2d + ggtitle('True Distribution Generated Samples') + xlim(min_x, max_x)
 
 p1_2b + p2_2d
 ```
@@ -421,7 +401,143 @@ p1_2b + p2_2d
 
 ### **2e.) Repeat [a] with n = 100**
 
-The critical threhold for the test statistic in this case does not depend on our sample size, as we assume to know the true $\sigma^2=1$ and the only other distributional paramter is assumed as apart of our hypothesis $H_0: \mu = 0$. Thus we can directly calculate the critical threshold value for our statistic based on these paramters and $\alpha$ value.
+**One-sided test**
+
+We will first determine critical threshold for the specified statistic for $\alpha=0.05$ for $H_A : \mu > 0$.
+
+
+```r
+one_sided_crit_value <- 
+  qnorm(p = 0.05, 
+        mean = 0,
+        # Corrected after update: 
+        # The distribution of the statistic (mean)
+        # will be normal with mean mu and sigma^2 = 1 / n
+        sd = 1 / sqrt(100), 
+        lower.tail = FALSE)
+
+cat('C_{0.95} | H_0: mu = 0: ', one_sided_crit_value) 
+```
+
+```
+C_{0.95} | H_0: mu = 0:  0.1644854
+```
+
+```r
+mean <- 0
+sd <- 1 / sqrt(100)
+domain <- seq(from = mean - 5*sd, 
+              to   = mean + 5*sd, 
+              by   = .001)
+
+df <- 
+  dnorm(domain, 
+        mean = mean, 
+        sd = sd) %>% 
+  data.frame(x = domain,
+             y = .)
+
+
+df %>%
+  ggplot() + 
+  geom_line(aes(x, y)) + 
+  geom_vline(aes(xintercept = one_sided_crit_value), 
+             col = 'red', 
+             lty = 2) +
+  annotate(geom = 'text', 
+           x = one_sided_crit_value + (.35*one_sided_crit_value), 
+           y = .7 * max(df$y), 
+           label = 'C_0.95', 
+           angle = -45, 
+           color = 'red') + 
+  xlab('') + ylab('Density')
+```
+
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
+**Two-sided test**
+
+We now determine critical threshold for the specified statistic for $\alpha=0.05$ for $H_A : \mu \neq 0$.
+
+
+```r
+lower_crit_value <- 
+  qnorm(p = 0.05 / 2, 
+        mean = 0,
+        sd = 1 / sqrt(100))
+
+upper_crit_value <- 
+  qnorm(p = 0.05 / 2, 
+        mean = 0,
+        sd = 1 / sqrt(100), 
+        lower.tail = FALSE)
+
+cat('C_{0.025} | H_0: mu = 0: ', lower_crit_value) 
+```
+
+```
+C_{0.025} | H_0: mu = 0:  -0.1959964
+```
+
+```r
+cat('C_{0.975} | H_0: mu = 0: ', upper_crit_value) 
+```
+
+```
+C_{0.975} | H_0: mu = 0:  0.1959964
+```
+
+```r
+mean <- 0
+sd <- 1 / sqrt(100)
+domain <- seq(from = mean - 5*sd, 
+              to   = mean + 5*sd, 
+              by   = .01)
+df <- 
+  dnorm(domain, 
+        mean = mean, 
+        sd = sd) %>% 
+  data.frame(x = domain,
+             y = .)
+
+breaks <-
+  quantile(df$x) %>%
+  c(lower_crit_value, 
+    upper_crit_value) %>% 
+  unname() %>% round(1)
+
+labels <- breaks
+labels[length(labels) - 1] <- 'C_low'
+labels[length(labels)] <- 'C_high'
+
+df %>%
+  ggplot() + 
+  geom_line(aes(x, y))+
+  geom_vline(aes(xintercept = lower_crit_value), 
+             col = 'red', 
+             lty = 2) + 
+  geom_vline(aes(xintercept = upper_crit_value), 
+             col = 'red', 
+             lty = 2) + 
+  # scale_x_continuous(breaks = breaks,
+  #                    labels = labels) + 
+  annotate(geom = 'text', 
+           x = lower_crit_value + (.35*lower_crit_value), 
+           y = .7 * max(df$y), 
+           label = 'C_0.025', 
+           angle = -45, 
+           color = 'red') + 
+    annotate(geom = 'text', 
+           x = upper_crit_value + (.35*upper_crit_value), 
+           y = .7 * max(df$y), 
+           label = 'C_0.975', 
+           angle = -45, 
+           color = 'red') + 
+  xlab('') + ylab('Density')
+```
+
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+
 
 ### **2f.) Repeat [b], but with n = 100**
 
@@ -449,7 +565,7 @@ p1_2f <-
                  color = 'black', 
                  fill = 'skyblue') + 
   geom_vline(aes(xintercept = one_sided_crit_value), 
-             col = 'red', lty = 2) +
+             col = 'black', lty = 2) +
   geom_vline(aes(xintercept = upper_crit_value), 
              col = 'red', lty = 2) +
   geom_vline(aes(xintercept = lower_crit_value), 
@@ -462,7 +578,7 @@ p1_2f <-
 print(p1_2f)
 ```
 
-![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
 ```r
 how_many <- function(x) length(which(x))
@@ -471,7 +587,7 @@ how_many(test_stats > one_sided_crit_value)
 ```
 
 ```
-[1] 0
+[1] 45
 ```
 
 ```r
@@ -479,7 +595,7 @@ how_many(test_stats < lower_crit_value)
 ```
 
 ```
-[1] 0
+[1] 32
 ```
 
 ```r
@@ -487,22 +603,39 @@ how_many(test_stats > upper_crit_value)
 ```
 
 ```
-[1] 0
+[1] 21
 ```
-
-
 
 ### **2g.) Repeat [c], but with n = 100**
 
-In this case, power does not depend on sample size as we know the null distribution, true distribution, and critical value, allowing up to calculate the power of the test by integrating the PDF of the true distribution outside the bounds set by our critical test statistic values. Thus, the previous values that we have calculated for the power of this statistical test are still valid when increasing sample size from $n = 20$ to $n = 100$.
 
 
 ```r
+# power = prob of correctly rejecting the null given that it is false
+#       = area under the TRUE distribution outside the critical values on the
+#          NULL distribution
+
+one_tail_power <- 
+  pnorm(one_sided_crit_value, 
+        mean = 0.5, 
+        sd = 1 / sqrt(100), 
+        lower.tail = FALSE)
+
+
+two_tail_power <- 
+  pnorm(lower_crit_value, 
+        mean = 0.5, 
+        sd = 1 / sqrt(100)) +
+  pnorm(upper_crit_value, 
+        mean = 0.5, 
+        sd = 1 / sqrt(100), 
+        lower.tail = FALSE) 
+
 cat('One tailed power: ', one_tail_power, '\n')
 ```
 
 ```
-One tailed power:  0.1261349 
+One tailed power:  0.9996034 
 ```
 
 ```r
@@ -510,8 +643,56 @@ cat('Two tailed power: ', two_tail_power, '\n')
 ```
 
 ```
-Two tailed power:  0.07909753 
+Two tailed power:  0.9988173 
 ```
+
+
+```r
+mean <- 0
+sd <- 1 / sqrt(100)
+domain <- seq(from = mean - 5*sd, 
+              to   = mean + 5*sd, 
+              by   = .001)
+df <-
+  data.frame(
+    domain = domain,
+    null = dnorm(domain, 
+                 mean = 0, 
+                 sd = 1 / sqrt(100)), 
+    true = dnorm(domain, 
+                 mean = 0.5, 
+                 sd = 1 / sqrt(100))) %>% 
+  tidyr::pivot_longer(-c('domain')) 
+
+colors <- 
+  c('One-Sided Critical Value' = 'black', 
+    'Two-Sided Critical Value' = 'red', 
+    'true' = 'dodgerblue', 
+    'null' = 'darkorange')
+  
+
+df %>%
+  ggplot() + 
+  geom_line(aes(domain, value, col = name), size = 2) + 
+  geom_vline(aes(xintercept = lower_crit_value, 
+                 color = 'Two-Sided Critical Value'), 
+              lty = 2, lwd = 1.1) + 
+  geom_vline(aes(xintercept = upper_crit_value, 
+                color = 'Two-Sided Critical Value'), 
+             lty = 2, lwd = 1.1) + 
+  geom_vline(aes(xintercept = one_sided_crit_value, 
+                 color = 'One-Sided Critical Value'), 
+             lty = 2, lwd = 1.1) + 
+  scale_color_manual(values = colors, 
+                     labels = c('Null Distribution', 
+                                'One-Sided Critical Value', 
+                                'True Distribution', 
+                                'Two-Sided Critical Value')) + 
+  theme(legend.title = element_blank()) + 
+  xlab('') + ylab('') 
+```
+
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 ### **2h.) Repeat [d], but with n = 100**
 
@@ -537,7 +718,7 @@ p2_2h <-
                  color = 'black', 
                  fill = 'skyblue') +
   geom_vline(aes(xintercept = one_sided_crit_value), 
-             col = 'red', lty = 2) +
+             col = 'black', lty = 2) +
   geom_vline(aes(xintercept = upper_crit_value), 
              col = 'red', lty = 2) +
   geom_vline(aes(xintercept = lower_crit_value), 
@@ -550,7 +731,7 @@ p2_2h <-
 print(p2_2h)
 ```
 
-![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
 ```r
 how_many <- function(x) length(which(x))
@@ -559,7 +740,7 @@ how_many(test_stats > one_sided_crit_value)
 ```
 
 ```
-[1] 0
+[1] 998
 ```
 
 ```r
@@ -575,27 +756,23 @@ how_many(test_stats > upper_crit_value)
 ```
 
 ```
-[1] 0
+[1] 998
 ```
-
-
 
 
 ```r
 library(patchwork)
 
-p1_2f <- p1_2f + ggtitle('n=20')
-p2_2h <- p2_2h + ggtitle('n=100')
+min_x <- min(p1_2f$data, p2_2h$data)
+max_x <- max(p1_2f$data, p2_2h$data)
+
+p1_2f <- p1_2f + ggtitle('Null Distribution Generated Samples') + xlim(c(min_x, max_x))
+p2_2h <- p2_2h + ggtitle('True Distribution Generated Samples') + xlim(c(min_x, max_x))
 
 p1_2f + p2_2h
 ```
 
-![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
-
-
-
-
-
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
 ### **2i.) Likelihood Ratio Test Under the Null**
 
@@ -664,7 +841,7 @@ p1_2i <-
 p1_2i
 ```
 
-![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
 **n = 100**
 
@@ -725,17 +902,17 @@ p2_2i <-
 p2_2i
 ```
 
-![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
 
 
 ```r
-p1_2i <- p1_2i + ggtitle('n = 20')
-p2_2i <- p2_2i + ggtitle('n = 100') 
+p1_2i <- p1_2i + ggtitle('n = 20') 
+p2_2i <- p2_2i + ggtitle('n = 100')
 
 p1_2i + p2_2i
 ```
 
-![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 
 ### **2j.) Likelihood Ratio Test Under the True Distribution**
 
@@ -803,7 +980,7 @@ p1_2j <-
 p1_2j
 ```
 
-![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
 
 **n = 100**
 
@@ -863,20 +1040,22 @@ p2_2j <-
 p2_2j
 ```
 
-![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
 
 
 ```r
-p1_2j <- p1_2j + ggtitle('n = 20') 
-p2_2j <- p2_2j + ggtitle('n = 100') 
+min_x <- min(p1_2j$data, p2_2j$data)
+max_x <- max(p1_2j$data, p2_2j$data)
+
+p1_2j <- p1_2j + ggtitle('n = 20') + xlim(c(min_x, max_x))
+p2_2j <- p2_2j + ggtitle('n = 100') + xlim(c(min_x, max_x)) 
 
 p1_2j + p2_2j
 ```
 
-![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
 
-
-## **3.) Prove $Pr(pval(T(X))) \sim unif[0,1] |$ H_0 is true**
+## **3.) Prove** $Pr(pval(T(X))) \sim unif[0,1] |$ H_0 is true
 
 By the [Probability integral transform](https://en.wikipedia.org/wiki/Probability_integral_transform), we can show
 
@@ -884,16 +1063,17 @@ $$
 T(X) \sim F(T(X))
 $$
 
-
+```{=tex}
 \begin{align*}
 & pval = F(T(X) \geq t) \\ 
 & = 1 - CDF(F(T(X)))
 \end{align*}
-
+```
 Let $p \in (0,1)$
 
-Then, 
+Then,
 
+```{=tex}
 \begin{align*}
 
 & Pr(pval \leq p)  \\ 
@@ -904,15 +1084,12 @@ Then,
 & = 1 - p 
 
 \end{align*}
-
+```
 Which can only be the case if the distribution of p-values is uniform.
-
-
 
 **Visual Aid of Proof**
 
-The only way that the expression $Pr(pval \leq p) = p$ can hold $\forall p$, 
-is if the distribution of p-values is uniform.
+The only way that the expression $Pr(pval \leq p) = p$ can hold $\forall p$, is if the distribution of p-values is uniform.
 
 
 ```r
@@ -956,4 +1133,4 @@ arrows(x0 = 0.1,
        lwd = 4)
 ```
 
-![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
