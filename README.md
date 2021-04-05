@@ -97,7 +97,7 @@ df %>%
   xlab('') + ylab('Density')
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
 **Two-sided test**
 
@@ -180,7 +180,7 @@ df %>%
   xlab('') + ylab('Density')
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 
 
@@ -220,7 +220,7 @@ p1_2b <-
 print(p1_2b)
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 ```r
 how_many <- function(x) length(which(x))
@@ -339,7 +339,7 @@ df %>%
   xlab('') + ylab('') 
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 ### **2d.) Histogram of Means under the True Distribution**
 
@@ -379,7 +379,7 @@ p2_2d <-
 print(p2_2d)
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 ```r
 how_many <- function(x) length(which(x))
@@ -417,7 +417,7 @@ p2_2d <- p2_2d + ggtitle('n=100')
 p1_2b + p2_2d
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 ### **2e.) Repeat [a] with n = 100**
 
@@ -462,7 +462,7 @@ p1_2f <-
 print(p1_2f)
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 ```r
 how_many <- function(x) length(which(x))
@@ -550,7 +550,7 @@ p2_2h <-
 print(p2_2h)
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
 ```r
 how_many <- function(x) length(which(x))
@@ -590,7 +590,7 @@ p2_2h <- p2_2h + ggtitle('n=100')
 p1_2f + p2_2h
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 
 
@@ -664,7 +664,7 @@ p1_2i <-
 p1_2i
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 **n = 100**
 
@@ -725,7 +725,7 @@ p2_2i <-
 p2_2i
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
 
 ```r
@@ -735,7 +735,7 @@ p2_2i <- p2_2i + ggtitle('n = 100')
 p1_2i + p2_2i
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
 ### **2j.) Likelihood Ratio Test Under the True Distribution**
 
@@ -803,7 +803,7 @@ p1_2j <-
 p1_2j
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
 **n = 100**
 
@@ -863,7 +863,7 @@ p2_2j <-
 p2_2j
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
 
 
 ```r
@@ -873,5 +873,5 @@ p2_2j <- p2_2j + ggtitle('n = 100')
 p1_2j + p2_2j
 ```
 
-![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 # Quantitative_Genomics_Homework_4
