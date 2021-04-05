@@ -874,4 +874,3 @@ p1_2j + p2_2j
 ```
 
 ![](R/jake_sauter_homework_4_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
-# Quantitative_Genomics_Homework_4
