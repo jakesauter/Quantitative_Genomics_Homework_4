@@ -189,8 +189,6 @@ df %>%
 
 ![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
-
-
 ### **2b.) Histogram of Means under the Null Distribution**
 
 **Simulate k = 1000 samples under the null hypothesis from part [a], calculate the mean for each sample, and plot a histogram of the means. How many samples statistics are beyond the critical thresholds you calculated in part [a]?**
@@ -254,8 +252,6 @@ how_many(test_stats > upper_crit_value)
 ```
 [1] 0
 ```
-
-
 
 ### **2c.) Calculating Power Given Known True Distriubtion**
 
@@ -456,7 +452,7 @@ p1_2f <-
                  color = 'black', 
                  fill = 'skyblue') + 
   geom_vline(aes(xintercept = one_sided_crit_value), 
-             col = 'red', lty = 2) +
+             col = 'black', lty = 2) +
   geom_vline(aes(xintercept = upper_crit_value), 
              col = 'red', lty = 2) +
   geom_vline(aes(xintercept = lower_crit_value), 
@@ -496,8 +492,6 @@ how_many(test_stats > upper_crit_value)
 ```
 [1] 0
 ```
-
-
 
 ### **2g.) Repeat [c], but with n = 100**
 
@@ -544,7 +538,7 @@ p2_2h <-
                  color = 'black', 
                  fill = 'skyblue') +
   geom_vline(aes(xintercept = one_sided_crit_value), 
-             col = 'red', lty = 2) +
+             col = 'black', lty = 2) +
   geom_vline(aes(xintercept = upper_crit_value), 
              col = 'red', lty = 2) +
   geom_vline(aes(xintercept = lower_crit_value), 
@@ -586,8 +580,6 @@ how_many(test_stats > upper_crit_value)
 ```
 
 
-
-
 ```r
 library(patchwork)
 
@@ -598,11 +590,6 @@ p1_2f + p2_2h
 ```
 
 ![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
-
-
-
-
-
 
 ### **2i.) Likelihood Ratio Test Under the Null**
 
