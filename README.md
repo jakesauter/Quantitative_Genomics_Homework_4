@@ -1,4 +1,4 @@
-# **"Quantitative Genomics and Genetics \n\n <font size=6> Homework 4 </font>**
+# **Quantitative Genomics and Genetics Homework 4**
 
 A report by **Jake Sauter**
 
