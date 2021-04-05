@@ -8,7 +8,7 @@ output:
     toc_float: false
     keep_md: true
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 
@@ -868,3 +868,89 @@ p1_2j + p2_2j
 ```
 
 ![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+
+
+
+## **3.) Prove $Pr(pval(T(X))) \sim unif[0,1] |$ H_0 is true**
+
+By the [Probability integral transform](https://en.wikipedia.org/wiki/Probability_integral_transform), we can show
+
+$$
+T(X) \sim F(T(X))
+$$
+
+
+\begin{align*}
+& pval = F(T(X) \geq t) \\ 
+& = 1 - CDF(F(T(X)))
+\end{align*}
+
+Let $p \in (0,1)$
+
+Then, 
+
+\begin{align*}
+
+& Pr(pval \leq p)  \\ 
+& = Pr(F_{T(X)}(T(X)) \leq p) \\ 
+& = Pr(F^{-1}_{T(X)}(F_{T(X)}(T(X))) \leq F^{-1}_{T(X)}(p)) \\ 
+& = Pr(T(X) \leq F^{-1}_{T(X)}(p)) \\
+& = 1 - F_{T(X)}(F^{-1}_{T(X)}(p)) \\
+& = 1 - p 
+
+\end{align*}
+
+Which can only be the case if the distribution of p-values is uniform.
+
+
+
+**Visual Aid of Proof**
+
+The only way that the expression $Pr(pval \leq p) = p$ can hold $\forall p$, 
+is if the distribution of p-values is uniform.
+
+
+```r
+plot(NULL, NULL, 
+     xlim = c(0, 1), 
+     ylim = c(0,0.2), 
+     xlab = 'pval', 
+     ylab = 'Density', 
+     yaxt = 'n')
+
+abline(h = 0.05, lwd = 4, lty = 2)
+
+rect(xleft = 0.2, 
+     xright = 0.205, 
+     ybottom = -1,
+     ytop = 0.05, 
+     density = 100)
+
+rect(xleft = 0, 
+     xright = 0.2, 
+     ybottom = -1,
+     ytop = 0.05, 
+     density = 3)
+
+text(x = 0.2, 
+     y = 0.06, 
+     'p = 0.2', 
+     font = 2)
+
+text(x = 0.2, 
+     y = 0.1, 
+     'Pr(pval < p) = Area = p', 
+     font = 2, 
+     cex = 1.4)
+
+
+arrows(x0 = 0.1, 
+       x1 = 0.1, 
+       y0 = 0.09, 
+       y1 = 0.03, 
+       lwd = 4)
+```
+
+![](jake_sauter_homework_4_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+
+
